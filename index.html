@@ -1,0 +1,1075 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+        <title>World Breached</title>
+
+        <style>
+            /* =========================================
+           RESET
+        ========================================= */
+
+            * {
+                box-sizing: border-box;
+            }
+
+            /* =========================================
+           BODY
+        ========================================= */
+
+            body {
+                margin: 0;
+
+                width: 100%;
+
+                height: 100vh;
+
+                background: #29231f;
+
+                display: flex;
+
+                justify-content: center;
+
+                align-items: center;
+
+                overflow: hidden;
+
+                font-family: Georgia, "Times New Roman", serif;
+            }
+
+            /* =========================================
+           BOOK
+        ========================================= */
+
+            .book {
+                width: min(750px, 90vw);
+
+                height: 90vh;
+
+                max-height: 900px;
+
+                background: #f5ead3;
+
+                border-radius: 8px;
+
+                padding: clamp(15px, 3vh, 35px);
+
+                box-shadow: 0 25px 60px rgba(0, 0, 0, 0.5);
+
+                position: relative;
+
+                display: flex;
+
+                flex-direction: column;
+            }
+
+            /* =========================================
+           PAGES
+        ========================================= */
+
+            .page {
+                display: none;
+
+                flex: 1;
+
+                min-height: 0;
+
+                border: 2px solid #92754b;
+
+                padding: clamp(20px, 4vh, 55px) clamp(20px, 4vw, 55px);
+
+                background: #f7ecd5;
+
+                overflow-y: auto;
+            }
+
+            .page.active {
+                display: block;
+            }
+
+            /* =========================================
+           COVER
+        ========================================= */
+
+            #page0 {
+                padding: 0;
+
+                border: none;
+
+                background: transparent;
+
+                overflow: hidden;
+            }
+
+            .cover-image {
+                width: 100%;
+
+                height: 100%;
+
+                display: flex;
+
+                justify-content: center;
+
+                align-items: center;
+
+                overflow: hidden;
+
+                border-radius: 5px;
+
+                cursor: pointer;
+            }
+
+            .cover-image img {
+                width: 100%;
+
+                height: 100%;
+
+                display: block;
+
+                object-fit: contain;
+
+                object-position: center;
+
+                transition:
+                    transform 0.3s ease,
+                    filter 0.3s ease;
+            }
+
+            .cover-image:hover img {
+                transform: scale(1.02);
+
+                filter: brightness(0.9);
+            }
+
+            /* =========================================
+           CHAPTER OPENING
+        ========================================= */
+
+            .chapter-opening {
+                height: 100%;
+
+                display: flex;
+
+                flex-direction: column;
+
+                justify-content: center;
+
+                align-items: center;
+
+                text-align: center;
+
+                padding: 20px;
+            }
+
+            /* =========================================
+           CHAPTER IMAGE
+        ========================================= */
+
+            .chapter-image {
+                width: 60%;
+
+                max-width: 400px;
+
+                height: 220px;
+
+                margin: 0 auto 25px auto;
+
+                overflow: hidden;
+
+                border-radius: 4px;
+
+                border: 1px solid #92754b;
+
+                background: #e7d8b9;
+
+                flex-shrink: 0;
+            }
+
+            .chapter-image img {
+                width: 100%;
+
+                height: 100%;
+
+                display: block;
+
+                /*
+                CONTAIN keeps the entire
+                image visible.
+            */
+
+                object-fit: contain;
+
+                object-position: center;
+            }
+
+            /* =========================================
+           CHAPTER NUMBER
+        ========================================= */
+
+            .chapter-number {
+                text-align: center;
+
+                font-size: 13px;
+
+                text-transform: uppercase;
+
+                letter-spacing: 4px;
+
+                color: #92754b;
+
+                margin-bottom: 8px;
+            }
+
+            /* =========================================
+           CHAPTER TITLE
+        ========================================= */
+
+            .chapter-opening h2 {
+                margin-top: 0;
+
+                margin-bottom: 0;
+
+                text-align: center;
+
+                font-size: clamp(28px, 4vw, 38px);
+
+                color: #30271f;
+            }
+
+            /* =========================================
+           NORMAL HEADINGS
+        ========================================= */
+
+            h2 {
+                text-align: center;
+
+                font-size: clamp(28px, 4vw, 38px);
+
+                margin-top: 10px;
+
+                margin-bottom: 30px;
+
+                color: #30271f;
+            }
+
+            h3 {
+                text-align: center;
+
+                font-size: clamp(24px, 3vw, 32px);
+
+                color: #30271f;
+
+                margin-top: 10px;
+
+                margin-bottom: 25px;
+            }
+
+            /* =========================================
+           STORY TEXT
+        ========================================= */
+
+            p {
+                font-size: clamp(15px, 2vw, 18px);
+
+                line-height: 1.8;
+
+                color: #382f27;
+
+                margin-bottom: 20px;
+
+                text-align: justify;
+
+                text-indent: 2em;
+            }
+
+            /* =========================================
+           CONTENTS
+        ========================================= */
+
+            .contents {
+                width: 100%;
+
+                max-width: 550px;
+
+                margin: 0 auto;
+            }
+
+            .contents-item {
+                display: flex;
+
+                justify-content: space-between;
+
+                align-items: center;
+
+                padding: 15px 8px;
+
+                border-bottom: 1px solid #c9b48e;
+
+                cursor: pointer;
+
+                font-size: 18px;
+
+                color: #382f27;
+
+                transition:
+                    background 0.2s ease,
+                    color 0.2s ease;
+            }
+
+            .contents-item:hover {
+                color: #735635;
+
+                background: #eee0c2;
+            }
+
+            /* =========================================
+           NAVIGATION
+        ========================================= */
+
+            .navigation {
+                display: flex;
+
+                justify-content: center;
+
+                align-items: center;
+
+                gap: 15px;
+
+                margin-top: 12px;
+
+                flex-shrink: 0;
+            }
+
+            .navigation button {
+                font-family: Georgia, "Times New Roman", serif;
+
+                background: #735635;
+
+                color: white;
+
+                border: none;
+
+                padding: 9px 17px;
+
+                border-radius: 5px;
+
+                cursor: pointer;
+
+                font-size: 14px;
+
+                transition:
+                    background 0.2s ease,
+                    transform 0.1s ease;
+            }
+
+            .navigation button:hover {
+                background: #513b25;
+            }
+
+            .navigation button:active {
+                transform: scale(0.97);
+            }
+
+            .navigation button:disabled {
+                opacity: 0.35;
+
+                cursor: not-allowed;
+            }
+
+            /* =========================================
+           PAGE NUMBER
+        ========================================= */
+
+            .page-number {
+                color: #92754b;
+
+                font-size: 14px;
+
+                min-width: 40px;
+
+                text-align: center;
+            }
+
+            /* =========================================
+           SCROLLBAR
+        ========================================= */
+
+            .page::-webkit-scrollbar {
+                width: 7px;
+            }
+
+            .page::-webkit-scrollbar-track {
+                background: #eadfc7;
+            }
+
+            .page::-webkit-scrollbar-thumb {
+                background: #b49a70;
+
+                border-radius: 10px;
+            }
+
+            /* =========================================
+           TABLET
+        ========================================= */
+
+            @media (max-width: 800px) {
+                .book {
+                    width: 94vw;
+
+                    height: 92vh;
+                }
+
+                .chapter-image {
+                    width: 65%;
+
+                    height: 200px;
+                }
+            }
+
+            /* =========================================
+           PHONE
+        ========================================= */
+
+            @media (max-width: 600px) {
+                body {
+                    padding: 8px;
+                }
+
+                .book {
+                    width: 96vw;
+
+                    height: 94vh;
+
+                    padding: 12px;
+                }
+
+                .page {
+                    padding: 25px 20px;
+                }
+
+                #page0 {
+                    padding: 0;
+                }
+
+                .navigation {
+                    gap: 8px;
+
+                    margin-top: 8px;
+                }
+
+                .navigation button {
+                    padding: 8px 12px;
+
+                    font-size: 13px;
+                }
+
+                .chapter-number {
+                    font-size: 11px;
+
+                    letter-spacing: 3px;
+                }
+
+                .chapter-opening {
+                    padding: 10px;
+                }
+
+                .chapter-image {
+                    width: 75%;
+
+                    height: 170px;
+
+                    margin-bottom: 20px;
+                }
+
+                .chapter-opening h2 {
+                    font-size: 27px;
+                }
+
+                h2 {
+                    font-size: 27px;
+
+                    margin-bottom: 25px;
+                }
+
+                p {
+                    font-size: 15px;
+
+                    line-height: 1.7;
+                }
+
+                .contents-item {
+                    font-size: 16px;
+
+                    padding: 13px 5px;
+                }
+            }
+
+            /* =========================================
+           VERY SHORT SCREENS
+        ========================================= */
+
+            @media (max-height: 600px) {
+                .book {
+                    height: 96vh;
+
+                    padding: 10px;
+                }
+
+                .page {
+                    padding: 20px 30px;
+                }
+
+                .navigation {
+                    margin-top: 7px;
+                }
+
+                .navigation button {
+                    padding: 6px 12px;
+                }
+
+                .chapter-opening {
+                    padding: 5px;
+                }
+
+                .chapter-image {
+                    width: 45%;
+
+                    height: 140px;
+
+                    margin-bottom: 12px;
+                }
+            }
+        </style>
+    </head>
+
+    <body>
+        <!-- =========================================
+         BOOK
+    ========================================= -->
+
+        <div class="book">
+            <!-- =========================================
+             COVER
+        ========================================= -->
+
+            <section class="page active" id="page0">
+                <div class="cover-image" onclick="goToPage(1)" title="Click to open the book">
+                    <!--
+                    COVER IMAGE
+
+                    Put your cover here:
+
+                    images/cover.jpg
+                -->
+
+                    <img
+                        src="https://media.discordapp.net/attachments/1431581028719530064/1502226340915580988/IMG_4313.jpg?ex=6a8023cd&is=6a7ed24d&hm=280fcbb476f546f9f1b0f74cdf2596ccd342dd7a4ccc5383694c03ee00214c42&=&format=webp&width=768&height=1024"
+                        alt="World Breached" />
+                </div>
+            </section>
+
+            <!-- =========================================
+             TABLE OF CONTENTS
+        ========================================= -->
+
+            <section class="page" id="page1">
+                <div class="chapter-number">Contents</div>
+
+                <h2>Table of Contents</h2>
+
+                <div class="contents">
+                    <!-- ================================
+                     CHAPTER ONE
+                ================================= -->
+
+                    <div class="contents-item" onclick="goToPage(2)">
+                        <span> A Silencing Song </span>
+
+                        <span> 01 </span>
+                    </div>
+
+                    <!-- ================================
+                     CHAPTER TWO
+                ================================= -->
+
+                    <div class="contents-item" onclick="goToPage(8)">
+                        <span> Finishing a Session </span>
+
+                        <span> 02 </span>
+                    </div>
+
+                    <!-- ================================
+                     CHAPTER THREE
+                ================================= -->
+
+                    <div class="contents-item" onclick="goToPage(6)">
+                        <span> The Next Mission </span>
+
+                        <span> 06 </span>
+                    </div>
+                </div>
+            </section>
+
+            <!-- =========================================
+             CHAPTER ONE OPENING
+        ========================================= -->
+
+            <section class="page" id="page2">
+                <div class="chapter-opening">
+                    <div class="cover-image">
+                        <img
+                            src="https://media.discordapp.net/attachments/1472553279618678980/1472553280029593632/A_Silencing_Song_Cover.jpg?ex=6a804b9c&is=6a7efa1c&hm=64c3b5cd9f5410de4dbf63788a249013a5e2fca29fe5ec5c575b6beb99bf724b&=&format=webp&width=768&height=1024"
+                            alt="Chapter One" />
+                    </div>
+
+                    <div class="chapter-number">PROLOGUE</div>
+
+                    <h2>A Silencing Song</h2>
+                </div>
+            </section>
+
+            <!-- =========================================
+             CHAPTER ONE STORY
+        ========================================= -->
+
+            <section class="page" id="page3">
+                <h2>Prologue - A Silencing Song</h2>
+                <h3><i>??? - March 29, 2033</i></h3>
+
+                <p>
+                    A quiet song echoed throughout the hollow. Calming but mysterious. It was unusual since no one lived
+                    or went in this part of the forest. Despite all the ominous signs, he still kept following that
+                    hauntingly beautiful voice. It was like the voice was possessing him.
+                </p>
+
+                <p>
+                    Once he got to the middle of the hollow, the voice abruptly stopped, leaving the area in complete
+                    silence.
+                </p>
+
+                <p>
+                    “Uhm, hello?” he asked, slightly confused. “Why did you stop singing?” He gazed around anxiously as
+                    a dark shadow started looming over him.
+                </p>
+
+                <p>
+                    “Who are you and why-” then suddenly, silver flashed across his face as he felt a piercing pain in
+                    his neck. It all happened so fast. One moment, he was following that melodic voice; the next, he was
+                    gasping for air while his blood poured out of his neck. He clutched his neck, blood pooling into his
+                    hands
+                </p>
+
+                <p>
+                    “Oh dear child, what a shame -for you, at least.” The figure snickered as he fell to the ground. It
+                    hurt so, so much, and oh, how much he wanted this torture to end. And as it all faded to black, e
+                    heard the person speak once more.
+                </p>
+
+                <p>“You will be perfect.”</p>
+            </section>
+
+            <!-- =========================================
+             ARC TWO OPENING
+        ========================================= -->
+
+            <section class="page" id="page4">
+                <div class="chapter-opening">
+                    <div class="cover-image">
+                        <img
+                            src="https://media.discordapp.net/attachments/1472554739685261384/1472554739869679699/Surprising_Beginnings_Cover.jpg?ex=6a804cf8&is=6a7efb78&hm=4d47c5f8f9e0d91b9431d253e3db928b01be2ff9c2b2fe72a514e4c74c087682&=&format=webp&width=768&height=1024"
+                            alt="Chapter Two" />
+                    </div>
+
+                    <div class="chapter-number">ARC ONE</div>
+
+                    <h2>Surprising Beginnings</h2>
+                </div>
+            </section>
+
+            <!-- =========================================
+     ARC ONE STORY
+    ========================================= -->
+
+            <!-- =========================================
+                CHAPTER 1
+        ========================================= -->
+
+            <section class="page" id="page5">
+                <h2>Chapter 1 - Finishing a Session</h2>
+                <h3><i>Eclipse - July 29th, 2046</i></h3>
+
+                <p>
+                    Ever wanted to be torn apart by a giant wyvern’s huge claws and get turned into a shredded fox
+                    pancake?
+                </p>
+
+                <p>
+                    Turns out that was going to be Eclipse soon because those huge claws were diving right towards him.
+                </p>
+
+                <p>“UHH, GUYS, A LITTLE HELP HERE?!”</p>
+
+                <p>This was totally the end.</p>
+
+                <p>
+                    <i>*BANG*</i>
+                </p>
+                <p>“Oh, thanks, Xylo!”</p>
+
+                <p>“You're welcome!” Xylo responded.</p>
+
+                <p>
+                    Good thing his electronic bestie came in with their laser gun to save him from his untimely demise.
+                    Though there were still more to deal with. At least a dozen dragon hunters, along with their five
+                    dragons to be exact.
+                </p>
+
+                <p>
+                    “Hey, pretty boy! Get over here! I need backup.” Briar called over her shoulder. Eclipse turned
+                    around to see that she was starting to be surrounded by five of the hunters.
+                </p>
+
+                <p>
+                    “<i>Fineee</i>, I’ll help since you need it so much.” he teased as he cleanly decapitated one of
+                    them with his scythe.
+                </p>
+
+                <p>
+                    Briar also fought, whipping her sword at them, which caused some of them to disintegrate due to the
+                    gashes along their bodies. “I hate you.”
+                </p>
+
+                <p>“¡Yo también te amo, hermana! (Love you too, sis!).” He called back, happily.</p>
+
+                <p>Despite being outnumbered, they easily took out all the hunters.</p>
+
+                <p>
+                    The next foe they were up against was another dragon hunter on top of a drake. Despite it being out
+                    for their throats, he couldn’t help but admire it.
+                </p>
+
+                <!-- =========================================
+                PAGE 3
+        ========================================= -->
+            </section>
+
+            <section class="page" id="page6">
+                <p>
+                    <i
+                        >Shiny teal scales, pinkish-red accents, and cream colored underscales to pull it all together.
+                        What’s not to love?</i
+                    >
+                    Eclipse thought. He did have to move to the left, so he didn’t get trampled.
+                </p>
+
+                <p>
+                    Briar raised her hand to the other side of the drake, summoning thick vines to restrict its
+                    movement. Through its thrashing, he managed to climb on top and kill the hunter. Eclipse pulled his
+                    scythe over his shoulder, preparing to slice the drake’s neck from the back. Under his feet, though,
+                    he felt its scales heat up and saw a fiery low between them.
+                </p>
+
+                <p>
+                    “Briar, watch out!” He shouted, jumping off its neck and tackling her out of the way. As he assumed,
+                    the drake’s mouth started spewing a stream of fire, disintegrating Briar’s vines.
+                </p>
+
+                <p>“So, got any plans?”</p>
+
+                <p>“Do you wanna go up in person with that sword of yours?”</p>
+
+                <p>“Do I have a choice...?”</p>
+
+                <p>“Nope.”</p>
+
+                <p>
+                    Raising her hand once more, Briar summoned back her vines to strangle its claws. He used his
+                    telekinesis to give the vines as much extra binding as he could.
+                </p>
+
+                <p>“Now, Eclipse!”</p>
+
+                <p>
+                    He held up his scythe, which shifted into its sword form. Eclipse aimed for that reptile’s throat
+                    while Briar summoned a few more tendrils to pull its head upwards. The scales glowed again as
+                    another stream of fire came out of its mouth, making the drake vaguely resemble a volcano.
+                </p>
+
+                <p>
+                    With a quick slash at its scaly hide, the drake let out a final roar and collapsed, disintegrating
+                    into the same pixels the last enemies did.
+                </p>
+
+                <p>
+                    Suddenly, a shrill whistle cut through the sounds of exploding gunfire and the slashing of weapons.
+                </p>
+
+                <p>
+                    It was Zephyr, and she needed help because she was about to get absolutely destroyed by the last
+                    dragon.
+                </p>
+
+                <p>
+                    Briar and Eclipse rushed over with Xylo following close behind to help as well. This pitch-black
+                    lizard was huge compared to the others, standing 15 feet tall and having a 50-foot wingspan. Its
+                    piercing gold gaze looked at them hungrily, probably choosing which one of them to eat up first.
+                </p>
+
+                <p>
+                    Fortunately, his cat, Saisei, was flying just above it. With a very well-shot laser, Xylo was able
+                    to give her enough electricity for her to deflect into the dragon’s eye.
+                </p>
+
+                <p>
+                    It roared in agony while the others charged at it. They were all attacking at full force, slashing,
+                    stabbing, shooting, anything to take it down.
+                </p>
+
+                <p>
+                    This dragon, in particular, would be tough to kill, since you would have to do a lot of damage to
+                    it. This balanced out its fatal weakness: fire.
+                </p>
+            </section>
+
+            <!-- =========================================
+             PAGE 4  
+        ========================================= -->
+            <section class="page" id="page7">
+                <p>
+                    They couldn’t deal that much damage before getting swatted away by the dragon’s tail. The onyx
+                    dragon went in for the kill while they braced for the impact of those horrible claws and teeth.
+                </p>
+
+                <p>The thing is, it surprisingly never came.</p>
+
+                <p>
+                    When they opened their eyes, they were met with the sight of Kieres standing over the dragon’s
+                    disintegrating body. Flaming guandao still in hand.
+                </p>
+
+                <p>“You’re welcome.”</p>
+
+                <p><i>*beep beep beep* Session Completed </i></p>
+
+                <p>“Phew! We finally beat the level, guys!” Xylo said excitedly.</p>
+
+                <p>
+                    Kieres started helping them up after their “tragic” falls while he held his weapon in his other
+                    hand, waiting for the flame to extinguish. “Why do I <i>always</i> have to save you guys?” Kieres
+                    asked, holding his hand out to him.
+                </p>
+
+                <p>
+                    “Well,” Eclipse said, grabbing his hand. “That sounds like a <i>'you'</i> problem, Kier.” Kieres
+                    elbowed him in return.
+                </p>
+
+                <p>Both of them were still jokingly arguing when the system’s voice started speaking again.</p>
+
+                <p>“Congratulations, Group 6! You have completed Level 4 successfully! Here are your scores:”</p>
+
+                <p>
+                    A screen above them lit up, showing a list of numbers. The numbers were randomized, changing every
+                    few seconds.
+                </p>
+
+                <p>They all gathered in front of it, waiting in anticipation.</p>
+
+                <p>
+                    “Zephyr Ellis Silverwood; Female, Age: 20, and Saisei; Female, Age: 7, tied at 5th place with a
+                    score of 151.” The echoing voice said.
+                </p>
+
+                <p>The screen zoomed in on the last two places, revealing their names along with their scores.</p>
+
+                <p>
+                    “<i>I guess it wasn’t our day today.</i>” Zephyr signed. She knelt down and offered Saisei a
+                    high-five. The feline meowed in response, returning the gesture with her paw.
+                </p>
+
+                <p>
+                    Eclipse smiled while watching them interact. He was happy to see that Saisei was getting closer to
+                    their other team members, especially after what happened in her past.
+                </p>
+            </section>
+            
+                 <!-- =========================================
+             PAGE 4 
+        ========================================= -->
+            <section class="page" id="page8">
+                
+            </section>
+            <!-- =========================================
+             CHAPTER THREE OPENING
+        ========================================= -->
+
+            <section class="page" id="page10">
+                <div class="chapter-opening">
+                    <div class="cover-image">
+                        <img src="images/chapter3.jpg" alt="Chapter Three" />
+                    </div>
+
+                    <div class="chapter-number">ARC THREE</div>
+
+                    <h2>The End</h2>
+                </div>
+            </section>
+
+            <!-- =========================================
+             CHAPTER THREE STORY
+        ========================================= -->
+
+            <section class="page" id="page12">
+                <p>This is where Chapter Three begins.</p>
+
+                <p>Replace this with your actual ending.</p>
+            </section>
+
+            <!-- =========================================
+             NAVIGATION
+        ========================================= -->
+
+            <div class="navigation">
+                <button id="previous" onclick="previousPage()">← Previous</button>
+
+                <span class="page-number" id="pageNumber"> 1 / 8 </span>
+
+                <button id="next" onclick="nextPage()">Next →</button>
+            </div>
+        </div>
+
+        <!-- =========================================
+         JAVASCRIPT
+    ========================================= -->
+
+        <script>
+            /* =========================================
+           AUTOMATIC PAGE COUNT
+        ========================================= */
+
+            const pages = document.querySelectorAll(".page");
+
+            const totalPages = pages.length;
+
+            let currentPage = 0;
+
+            /* =========================================
+           SHOW PAGE
+        ========================================= */
+
+            function showPage(number) {
+                if (number < 0 || number >= totalPages) {
+                    return;
+                }
+
+                /*
+                Hide all pages.
+            */
+
+                pages.forEach(function (page) {
+                    page.classList.remove("active");
+                });
+
+                /*
+                Show selected page.
+            */
+
+                pages[number].classList.add("active");
+
+                /*
+                Remember page.
+            */
+
+                currentPage = number;
+
+                /*
+                Update navigation.
+            */
+
+                updateButtons();
+
+                /*
+                Start the page
+                at the top.
+            */
+
+                pages[number].scrollTop = 0;
+            }
+
+            /* =========================================
+           NEXT PAGE
+        ========================================= */
+
+            function nextPage() {
+                if (currentPage < totalPages - 1) {
+                    showPage(currentPage + 1);
+                }
+            }
+
+            /* =========================================
+           PREVIOUS PAGE
+        ========================================= */
+
+            function previousPage() {
+                if (currentPage > 0) {
+                    showPage(currentPage - 1);
+                }
+            }
+
+            /* =========================================
+           GO TO PAGE
+        ========================================= */
+
+            function goToPage(number) {
+                showPage(number);
+            }
+
+            /* =========================================
+           UPDATE NAVIGATION
+        ========================================= */
+
+            function updateButtons() {
+                /*
+                Previous button.
+            */
+
+                document.getElementById("previous").disabled = currentPage === 0;
+
+                /*
+                Next button.
+            */
+
+                document.getElementById("next").disabled = currentPage === totalPages - 1;
+
+                /*
+                Page number.
+            */
+
+                document.getElementById("pageNumber").textContent = `${currentPage + 1} / ${totalPages}`;
+            }
+
+            /* =========================================
+           KEYBOARD CONTROLS
+        ========================================= */
+
+            document.addEventListener("keydown", function (event) {
+                if (event.key === "ArrowRight") {
+                    nextPage();
+                }
+
+                if (event.key === "ArrowLeft") {
+                    previousPage();
+                }
+            });
+
+            /* =========================================
+           START BOOK
+        ========================================= */
+
+            showPage(0);
+        </script>
+    </body>
+</html>
